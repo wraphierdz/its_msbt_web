@@ -21,6 +21,12 @@
             --font-display: 'Ethnocentric', 'Orbitron', sans-serif;
             --font-body: 'Rajdhani', sans-serif;
             --neon-blue: #00d2ff;
+            --pale-blue: #C5EAF3;
+            --bright-orange: #EA6323;
+            --dark-grey: #737373;
+            --light-grey: #D9D9D9;
+            --charcoal: #2F2F2F;
+
         }
 
         body, html {
@@ -36,13 +42,13 @@
 
         /* 2. NAVBAR DENGAN GRADASI GELAP */
         .navbar {
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
-            padding: 20px 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 10%, rgba(0, 0, 0, 0.5) 100%);
+            padding: 15px 0;
             transition: all 0.3s ease;
         }
 
         .navbar-brand img {
-            height: 80px; /* Sesuaikan dengan logo MSBT kamu */
+            height: 40px; /* Sesuaikan dengan logo MSBT kamu */
             width: auto;
             max-height: 100%;
         }
@@ -58,8 +64,8 @@
         }
 
         .navbar-nav .nav-link:hover {
-            color: var(--neon-blue) !important;
-            text-shadow: 0 0 10px var(--neon-blue);
+            color: var(--pale-blue) !important;
+            text-shadow: 0 0 10px var(--pale-blue);
         }
 
         /* 4. SETUP FRAME & GRADASI TRANSISI */
@@ -100,6 +106,7 @@
             font-family: var(--font-display);
             font-size: 1.2rem;
             letter-spacing: 3px;
+            margin-top: 100px;
             margin-bottom: 30px;
         }
 
@@ -111,14 +118,14 @@
 
         .main-title {
             font-family: var(--font-display);
-            font-size: 4rem;
+            font-size: 3rem;
             line-height: 1.2;
             margin: 0;
             text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
         }
 
         .subtitle {
-            margin-top: 30px;
+            margin-top: 20px;
             font-size: 1.1rem;
             font-weight: 400;
             color: #d1d1d1;
@@ -185,7 +192,7 @@
 
         .achv-card {
             width: 230px;
-            background: linear-gradient(135deg, #EA6323 0%, #a84111 100%); /* Oranye MSBT */
+            background: linear-gradient(135deg, var(--bright-orange) 0%, #a84111 100%); /* Oranye MSBT */
             border-radius: 12px;
             padding: 20px 15px;
             box-shadow: 0 15px 25px rgba(0,0,0,0.5);
@@ -200,7 +207,7 @@
             top: -15px;
             left: -15px;
             background-color: white;
-            color: #EA6323;
+            color: var(--bright-orange);
             font-family: var(--font-display);
             font-size: 1.2rem;
             padding: 5px 12px;
@@ -276,7 +283,7 @@
         /* --- STYLE FRAME 5 (FOOTER) --- */
         .bg-frame-footer {
             background-color: #0a0a0a; /* Hitam yang sedikit lebih terang dari frame 4 */
-            border-top: 3px solid #EA6323; /* Garis oranye tegas di atas footer */
+            border-top: 3px solid var(--bright-orange); /* Garis oranye tegas di atas footer */
         }
 
         .footer-heading {
@@ -301,7 +308,7 @@
         }
 
         .contact-item i {
-            color: #EA6323; /* Warna ikon oranye */
+            color: var(--bright-orange); /* Warna ikon oranye */
             font-size: 1.3rem;
             margin-right: 15px;
         }
@@ -326,7 +333,7 @@
         }
 
         .social-links a:hover {
-            color: #EA6323; /* Berubah oranye saat disentuh */
+            color: var(--bright-orange); /* Berubah oranye saat disentuh */
             transform: translateY(-5px); /* Efek melompat kecil */
             text-shadow: 0 5px 15px rgba(234, 99, 35, 0.4);
         }
@@ -341,6 +348,34 @@
             color: #666;
             font-size: 0.9rem;
             font-family: var(--font-body);
+        }
+
+        /* --- KONTROL RESPONSIVITAS UNTUK LAYAR LAPTOP (TINGGI SEMPIT) --- */
+        @media (max-height: 850px) and (min-width: 992px) {
+            
+            /* 1. Mengecilkan ukuran teks Achievement di tengah */
+            .achievement-title {
+                font-size: 3.5rem;
+            }
+
+            /* Memastikan animasi pop-up tetap menggunakan skala 80% */
+            .show-achievements .pos-1 { opacity: 1; transform: translateY(0) scale(0.8); }
+            .show-achievements .pos-2 { opacity: 1; transform: translateY(0) scale(0.8); }
+            .show-achievements .pos-3 { opacity: 1; transform: translateY(0) scale(0.8); }
+            .show-achievements .pos-4 { opacity: 1; transform: translateY(0) scale(0.8); }
+            .show-achievements .pos-5 { opacity: 1; transform: translateY(0) scale(0.8); }
+
+            /* 3. Menarik posisi kartu lebih ke sudut layar agar menjauhi teks */
+            .pos-1 { top: 5%; left: 2%; }
+            .pos-2 { top: 5%; right: 2%; }
+            .pos-3 { bottom: 5%; left: 5%; }
+            .pos-4 { bottom: 5%; right: 5%; }
+            .pos-5 { bottom: -2%; }
+
+            /* 4. Menyesuaikan jarak ombak di Frame 1 agar tidak terlalu turun */
+            .wave-animation-container {
+                margin-top: 5px;
+            }
         }
 
         /* Penyesuaian ukuran untuk layar HP */
@@ -390,7 +425,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="#">ABOUT</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">OUR BOAT</a></li>
+                    <li class="nav-item"><a class="nav-link" href="our-boat.html">OUR BOAT</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">COMPETITION</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">PARTNER WITH US</a></li>
                 </ul>
@@ -410,8 +445,8 @@
 
                     <div class="wave-animation-container">
                         <svg class="orange-wave" viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M 0 30 Q 200 50 400 10 Q 200 40 0 30 Z" fill="#EA6323"></path>
-                            <path d="M 50 45 Q 200 60 350 25 Q 200 50 50 45 Z" fill="#EA6323" opacity="0.6"></path>
+                            <path d="M 0 30 Q 200 50 400 10 Q 200 40 0 30 Z" fill="var(--bright-orange)"></path>
+                            <path d="M 50 45 Q 200 60 350 25 Q 200 50 50 45 Z" fill="var(--bright-orange)" opacity="0.6"></path>
                         </svg>
                     </div>
                 </div>
@@ -485,7 +520,7 @@
                         <div class="corner-badge">1st</div>
                         <h5 class="achv-name">JALAPATIH IV</h5>
                         <img src="assets/jp4.png" alt="Jalapatih I" class="achv-img">
-                        <p class="achv-desc">First boat to use hydrofoil technology in Indonesia.</p>
+                        <p class="achv-desc">First solar boat to use hydrofoil technology in Indonesia.</p>
                     </div>
                 </div>
 
