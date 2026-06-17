@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner With Us - ITS MSBT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .page-header {
+            padding: 120px 0 0 0; text-align: center;
+            background: radial-gradient(circle at top, #1a1a1a 0%, var(--bg-dark) 70%);
+        }
+        .section-title {
+            font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.5rem);
+            letter-spacing: 3px; margin-bottom: 10px;
+        }
+        .page-header .text-muted { color: #d1d1d1 !important; }
+
+        .outline-gradient {
+            padding: 3px; border-radius: 14px;
+            background: linear-gradient(45deg, var(--bright-orange), var(--pale-blue), var(--bright-orange), var(--pale-blue));
+            background-size: 300% 300%; transition: background-position 0.8s ease;
+        }
+        .outline-gradient:hover { background-position: 100% 50%; }
+
+        /*cp style*/
+        .cp-link {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        .cp-link:hover {
+            color: var(--bright-orange);
+            text-shadow: 0 0 8px rgba(234, 99, 35, 0.4);
+        }
+
+        /*benefit style*/
+        .benefit-stack-container {
+            display: flex; justify-content: center; align-items: center;
+            height: 500px; padding: 20px 0; margin-bottom: 80px;
+        }
+        .benefit-card-wrapper {
+            position: relative; width: 250px; height: 420px; margin-left: -130px; 
+            border-radius: 14px; flex-shrink: 0; box-shadow: -15px 0 25px rgba(0,0,0,0.9);
+            transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), margin-left 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer; z-index: 1;
+        }
+        .benefit-card-wrapper:first-child { margin-left: 0; }
+        
+        .benefit-card-inner {
+            background-color: var(--card-dark); border-radius: 11px; height: 100%;
+            padding: 30px 20px; display: flex; flex-direction: column; position: relative; z-index: 2;
+        }
+        .benefit-title { font-family: var(--font-display); font-size: 1.1rem; color: var(--bright-orange); margin-bottom: 15px; line-height: 1.3; }
+        .benefit-text { color: #ccc; font-size: 0.95rem; line-height: 1.6; margin: 0; }
+
+        .benefit-stack-container:hover .benefit-card-wrapper { filter: brightness(0.7); }
+        .benefit-card-wrapper:hover {
+            transform: translateY(-50px); z-index: 100;
+            box-shadow: 0 30px 60px rgba(0,0,0,1); filter: brightness(1) !important;
+        }
+        .benefit-card-wrapper:hover ~ .benefit-card-wrapper { transform: translateX(140px); z-index: 1; }
+
+        .recent-sponsor-logo {
+            height: 250px; width: auto; max-width: 250px; object-fit: contain;
+            filter: grayscale(100%) opacity(0.7); transition: all 0.4s ease; margin: 25px 20px; 
+        }
+        .recent-sponsor-logo:hover { filter: grayscale(0%) opacity(1); transform: scale(1.15); }        
+
+        /*banner berjalan*/
+        .marquee-wrapper {
+            width: 100%; overflow: hidden; background-color: #ffffff; padding: 30px 0;
+            border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;
+        }
+        .marquee-track { display: flex; align-items: center; width: max-content; }
+        .past-sponsor-logo { height: 80px; width: auto; max-width: 220px; object-fit: contain; margin: 0 30px; transition: transform 0.3s ease; }
+        .past-sponsor-logo:hover { transform: scale(1.1); }
+        .track-left { animation: scrollLeft 35s linear infinite; }
+        .track-right { animation: scrollRight 35s linear infinite; }
+
+        /* animasi outline gradient*/
+        @keyframes scrollLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes scrollRight { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+
+        .form-card { background-color: var(--card-dark); padding: 40px; border-radius: 11px; height: 100%; }
+        .form-control {
+            background-color: #050505; border: 1px solid var(--pale-blue);
+            color: white; border-radius: 6px; transition: all 0.3s;
+        }
+        .form-control:focus { background-color: #0a0a0a; border-color: var(--bright-orange); color: white; box-shadow: 0 0 12px rgba(234, 99, 35, 0.4); }
+        .form-label.text-muted { color: var(--pale-blue) !important; font-weight: 600; letter-spacing: 1px; }
+        
+        .form-control[type="file"] { color: #d1d1d1; }
+        .form-control[type="file"]::file-selector-button {
+            background-color: #121212; color: var(--pale-blue); border: none;
+            border-right: 1px solid var(--pale-blue); margin-right: 15px;
+            font-weight: 600; transition: all 0.3s ease; cursor: pointer;
+        }
+        .form-control[type="file"]:hover::file-selector-button { background-color: var(--bright-orange); color: white; border-right-color: var(--bright-orange); }
+
+        .btn-submit {
+            background-color: var(--bright-orange); color: white; font-family: var(--font-display);
+            font-size: 0.9rem; letter-spacing: 1px; padding: 12px; border: none; width: 100%;
+            border-radius: 6px; transition: all 0.3s;
+        }
+        .btn-submit:hover { background-color: #c9521a; box-shadow: 0 5px 15px rgba(234, 99, 35, 0.4); }
+        
+        .success-msg {
+            display: none; background-color: rgba(40, 167, 69, 0.15); border: 1px solid #28a745;
+            color: #28a745; padding: 15px; border-radius: 6px; margin-top: 15px; text-align: center; font-weight: 600;
+        }
+
+        .cp-list { list-style: none; padding: 0; }
+        .cp-list li { margin-bottom: 25px; display: flex; align-items: center; }
+        .cp-icon { font-size: 2rem; color: var(--bright-orange); margin-right: 20px; }
+        .cp-details h5 { margin: 0; font-size: 1.1rem; color: var(--pale-blue); }
+
+        /* social media style*/
+        .big-socials { padding: 50px 0; border-top: 1px dashed #333; border-bottom: 1px dashed #333; margin: 60px auto; }
+        .social-item i { font-size: 3.5rem; color: var(--pale-blue); display: block; margin-bottom: 10px; transition: all 0.3s; }
+        .social-item:hover { color: var(--bright-orange); }
+        .social-item:hover i { color: var(--pale-blue); transform: translateY(-10px); }
+        .social-item { 
+            text-align: center; 
+            text-decoration: none; 
+            color: #aaa; 
+            transition: all 0.3s; 
+            
+            width: 130px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @media (max-width: 991px) {
+            .benefit-stack-container { flex-direction: column; height: auto; gap: 30px; }
+            .benefit-card-wrapper { margin-left: 0; width: 100%; max-width: 400px; height: auto; min-height: 250px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+            .benefit-card-wrapper:hover { transform: translateY(-5px) rotate(0); }
+            .benefit-card-wrapper:hover ~ .benefit-card-wrapper { transform: none; } 
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid px-5">
+            <a class="navbar-brand text-white" href="/">
+                <img src="/assets/logo-white.png" alt="MSBT Logo" onerror="this.style.display='none'">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">ABOUT</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/our-boat">OUR BOAT</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/competition">COMPETITION</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/partner">PARTNER WITH US</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <div class="container">
+            <h1 class="section-title text-white"> BECOME A PARTNER</h1>
+            <p class="text-muted fs-5">Collaborate with us to shape the future of maritime technology.</p>
+        </div>
+    </header>
+
+    <section class="container mt-5 mb-5">
+        <div class="row g-5 align-items-center">
+            
+            <div class="col-lg-7">
+                <div class="outline-gradient shadow-lg">
+                    <div class="form-card">
+                        
+                        <form id="partnerForm" onsubmit="submitForm(event)">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small">Name</label>
+                                    <input type="text" class="form-control" name="name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small">Institution / Company</label>
+                                    <input type="text" class="form-control" name="institution" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small">Email Address</label>
+                                    <input type="email" class="form-control" name="email" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small">Phone Number</label>
+                                    <input type="tel" class="form-control" name="phone" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label text-muted small">Message</label>
+                                    <textarea class="form-control" rows="4" name="message" required></textarea>
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <label class="form-label text-muted small">Add Attachment (Proposal/Documents)</label>
+                                    <input type="file" class="form-control" name="attachment" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+                                </div>
+                                <div class="col-12 mt-4">
+                                    <button type="submit" class="btn-submit">SEND MESSAGE</button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <div id="successMsg" class="success-msg">
+                            <i class="bi bi-check-circle-fill me-2"></i> Message sent successfully! Our team will contact you soon.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 ps-lg-5">
+                <h3 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 30px;">CONTACT PERSONS</h3>
+                <ul class="cp-list">
+                    <li>
+                        <i class="bi bi-headset cp-icon"></i>
+                        <div class="cp-details">
+                            <h5>Public Relation</h5>
+                            <a href="https://wa.me/6282247637173" target="_blank" class="cp-link">+62 822-4763-7173 <i class="bi bi-whatsapp ms-1"></i></a>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="bi bi-person-badge cp-icon"></i>
+                        <div class="cp-details">
+                            <h5>General Manager</h5>
+                            <a href="https://wa.me/6281228843375" target="_blank" class="cp-link">+62 812-2884-3375 <i class="bi bi-whatsapp ms-1"></i></a>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="bi bi-briefcase cp-icon"></i>
+                        <div class="cp-details">
+                            <h5>Chief Officer</h5>
+                            <a href="https://wa.me/6282145319402" target="_blank" class="cp-link">+62 821-4531-9402 <i class="bi bi-whatsapp ms-1"></i></a>
+                        </div>
+                    </li>
+                    <li>
+                        <i class="bi bi-tools cp-icon"></i>
+                        <div class="cp-details">
+                            <h5>Chief Engineer</h5>
+                            <a href="https://wa.me/62895366152293" target="_blank" class="cp-link">+62 895-36615-2293 <i class="bi bi-whatsapp ms-1"></i></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="container big-socials">
+        <div class="d-flex flex-wrap justify-content-center gap-4 gap-md-5">
+            
+            <a href="mailto:its.marinesolarboatteam@gmail.com" class="social-item">
+                <i class="bi bi-envelope-fill"></i>
+                <span>its.marinesolarboatteam@gmail.com</span>
+            </a>
+            
+            <a href="https://www.instagram.com/its_msbt/" target="_blank" class="social-item">
+                <i class="bi bi-instagram"></i>
+                <span>@its_msbt</span>
+            </a>
+            
+            <a href="https://www.tiktok.com/@its_msbt" target="_blank" class="social-item">
+                <i class="bi bi-tiktok"></i>
+                <span>@its_msbt</span>
+            </a>
+
+            <a href="https://www.linkedin.com/company/itsmsbt/" target="_blank" class="social-item">
+                <i class="bi bi-linkedin"></i>
+                <span>ITS Marine Solar Boat Team</span>
+            </a>
+            
+            <a href="https://www.youtube.com/@itsmarinesolarboatteam8737" target="_blank" class="social-item">
+                <i class="bi bi-youtube"></i>
+                <span>ITS Marine Solar Boat Team</span>
+            </a>
+
+        </div>
+    </section>
+
+    <section class="container mb-5 pb-5 mt-5">
+        <h3 class="text-center" style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 50px;">WHY PARTNER WITH US</h3>
+        
+        <div class="benefit-stack-container">
+            
+            <div class="benefit-card-wrapper outline-gradient">
+                <div class="benefit-card-inner">
+                    <div class="benefit-title">BRAND VISIBILITY</div>
+                    <p class="benefit-text">Prominent logo placement on our boat, social media, and all marketing materials to ensure wide industry exposure.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-card-wrapper outline-gradient">
+                <div class="benefit-card-inner">
+                    <div class="benefit-title">SPEAKING OPPORTUNITY</div>
+                    <p class="benefit-text">Deliver keynote speeches and showcase your expertise at our future events and exclusive talk shows.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-card-wrapper outline-gradient">
+                <div class="benefit-card-inner">
+                    <div class="benefit-title">LOGO PLACEMENT</div>
+                    <p class="benefit-text">Featured logo and comprehensive description on our official website to drive direct traffic to your business.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-card-wrapper outline-gradient">
+                <div class="benefit-card-inner">
+                    <div class="benefit-title">EXCLUSIVE BOOTH</div>
+                    <p class="benefit-text">Secure an exclusive booth space at our events to effectively showcase your products and generate new leads.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-card-wrapper outline-gradient">
+                <div class="benefit-card-inner">
+                    <div class="benefit-title">SOCIAL MEDIA</div>
+                    <p class="benefit-text">Receive active and targeted promotion across our Instagram, Tiktok, LinkedIn, and Youtube platforms.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-card-wrapper outline-gradient">
+                <div class="benefit-card-inner">
+                    <div class="benefit-title">RECOGNITION</div>
+                    <p class="benefit-text">Gain special recognition and verbal mentions during the opening and closing remarks at our events.</p>
+                </div>
+            </div>
+            
+            <div class="benefit-card-wrapper outline-gradient">
+                <div class="benefit-card-inner">
+                    <div class="benefit-title">TECH ADVANCEMENT</div>
+                    <p class="benefit-text">Actively support green energy innovation and Net Zero Emissions targets through our solar research.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="container text-center mb-5 pb-5 gap-4">
+        <h3 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 50px;">OUR RECENT SPONSORS</h3>
+        <div class="d-flex flex-wrap justify-content-center align-items-center">
+            <img src="/assets/FIBERBOAT-LOGO.png" alt="Sponsor" class="recent-sponsor-logo" onerror="this.style.display='none'">
+            <img src="/assets/BBS-LOGO.png" alt="Sponsor" class="recent-sponsor-logo" onerror="this.style.display='none'">
+            <img src="/assets/DRAGONSHIP-LOGO.png" alt="Sponsor" class="recent-sponsor-logo" onerror="this.style.display='none'">
+            <img src="/assets/KUPPRUM-LOGO.png" alt="Sponsor" class="recent-sponsor-logo" onerror="this.style.display='none'">
+            <img src="/assets/JEMLA-LOGO.png" alt="Sponsor" class="recent-sponsor-logo" onerror="this.style.display='none'">
+        </div>
+    </section>
+
+    <section class="mb-5 pb-5">
+        <h3 class="text-center" style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 30px;">OUR PAST SPONSORS</h3>
+        
+        <div class="marquee-wrapper">
+            <div class="marquee-track track-left">
+                <img src="/assets\past-sponsor\pelindo.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\pertamina.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\petrokimia.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\pln-real.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\telkom.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\bni.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\mandiri.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\bpjs.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\eprop.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\justus.png" class="past-sponsor-logo" alt="Past">
+            </div>
+        </div>
+
+        <div class="marquee-wrapper" style="border-top: none;">
+            <div class="marquee-track track-right">
+                <img src="/assets\past-sponsor\airfast.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\pkj.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\apbs.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\au.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\badaklng.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\bahana.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\sig.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\pelni.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\bki.png" class="past-sponsor-logo" alt="Past">
+                <img src="/assets\past-sponsor\blog.png" class="past-sponsor-logo" alt="Past">
+            </div>
+        </div>
+    </section>
+
+    <footer class="frame bg-frame-footer">
+        <div class="content w-100">
+            <div class="container text-start">
+                <div class="row pt-5 justify-content-between">
+                    
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <h3 class="footer-heading">HEADQUARTERS</h3>
+                        <p class="footer-text">
+                            Institut Teknologi Sepuluh Nopember<br>
+                            Keputih, Sukolilo, Surabaya<br>
+                            Jawa Timur 60111, Indonesia
+                        </p>
+                    </div>
+
+                    <div class="col-lg-4 mb-5 mb-lg-0 d-flex justify-content-lg-center">
+                        <div>
+                            <h3 class="footer-heading">GET IN TOUCH</h3>
+                            <div class="contact-item">
+                                <i class="bi bi-envelope-fill"></i>
+                                <a href="mailto:msbt@its.ac.id">its.marinesolarboatteam@gmail.com</a>
+                            </div>
+                            <div class="contact-item">
+                                <i class="bi bi-whatsapp"></i>
+                                <a href="https://wa.me/6282247637173" target="_blank">+62 822-4763-7173 (Public Relation)</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 d-flex justify-content-lg-end">
+                        <div>
+                            <h3 class="footer-heading">SOCIAL MEDIA</h3>
+                            <div class="social-links-vertical">
+                                <a href="https://www.instagram.com/its_msbt/" target="_blank">
+                                    <i class="bi bi-instagram"></i> @its_msbt
+                                </a>
+                                <a href="https://www.tiktok.com/@its_msbt" target="_blank">
+                                    <i class="bi bi-tiktok"></i> @its_msbt
+                                </a>
+                                <a href="https://www.youtube.com/@itsmarinesolarboatteam8737" target="_blank">
+                                    <i class="bi bi-youtube"></i> ITS Marine Solar Boat Team
+                                </a>
+                                <a href="https://www.linkedin.com/company/itsmsbt/" target="_blank">
+                                    <i class="bi bi-linkedin"></i> ITS Marine Solar Boat Team
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="footer-divider">
+                <div class="text-center footer-copyright">
+                    &copy; 2026 ITS Marine Solar Boat Team. All Rights Reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        async function submitForm(event) {
+            event.preventDefault(); 
+            
+            const form = document.getElementById('partnerForm');
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/partner', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if(result.success) {
+                    document.getElementById('successMsg').style.display = 'block';
+                    form.reset(); 
+                    setTimeout(() => {
+                        document.getElementById('successMsg').style.display = 'none';
+                    }, 5000);
+                }
+            } catch (error) {
+                alert("Gagal mengirim pesan. Silakan coba lagi.");
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

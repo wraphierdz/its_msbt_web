@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - MSBT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+
+        @font-face {
+            font-family: 'Ethnocentric';
+            src: url('/assets/Ethnocentric-Regular.otf') format('truetype');
+            font-weight: normal;
+        }
+
+        :root {
+            --font-display: 'Ethnocentric', 'Orbitron', sans-serif;
+            --font-body: 'Rajdhani', sans-serif;
+            --bright-orange: #EA6323;
+            --pale-blue: #C5EAF3;
+            --bg-dark: #050505;
+            --card-dark: #121212;
+            --text-dark: #1a1a1a;
+        }
+
+        
+        body {
+            background-color: #050505;
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            background: #121212;
+            padding: 40px;
+            border-radius: 12px;
+            border-top: 4px solid #EA6323;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            width: 100%;
+            max-width: 400px;
+        }
+        .form-control {
+            background-color: #000;
+            border: 1px solid #333;
+            color: white;
+        }
+        .form-control:focus {
+            background-color: #0a0a0a;
+            border-color: #C5EAF3;
+            color: white;
+            box-shadow: none;
+        }
+        .btn-login {
+            background-color: #EA6323;
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        .btn-login:hover { background-color: #c9521a; }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="text-center mb-4">
+            <img src="/assets/logo-white.png" alt="MSBT Logo" style="height: 50px; margin-bottom: 20px;">
+            <h4 style="font-family: 'Orbitron', sans-serif; letter-spacing: 2px;">COMMAND CENTER</h4>
+            <p class="text-muted small">Authorized Personnel Only</p>
+        </div>
+
+        <form action="/login" method="POST">
+            <div class="mb-3">
+                <label class="form-label" style="color: #C5EAF3;">Admin ID</label>
+                <input type="text" class="form-control" name="username" required autocomplete="off">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="color: #C5EAF3;">Password</label>
+                <input type="password" class="form-control" name="password" required>
+            </div>
+            <button type="submit" class="btn-login">SYSTEM LOGIN</button>
+        </form>
+    </div>
+
+</body>
+</html>

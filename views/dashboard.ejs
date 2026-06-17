@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSBT Command Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #050505;
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            display: flex;
+        }
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #121212;
+            border-right: 1px solid #333;
+            padding: 20px;
+            position: fixed;
+        }
+        .sidebar-link {
+            color: #d1d1d1;
+            text-decoration: none;
+            display: block;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: rgba(234, 99, 35, 0.1);
+            color: #EA6323;
+            border-left: 3px solid #EA6323;
+        }
+        .sidebar-link i { margin-right: 10px; }
+        
+        /* Main Content Area */
+        .main-content {
+            margin-left: 250px;
+            padding: 40px;
+            width: 100%;
+        }
+        .header-title {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+        .data-card {
+            background: #121212;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 300px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="text-center mb-5 mt-3">
+            <img src="/assets/logo-white.png" alt="MSBT" style="height: 40px;">
+        </div>
+
+        <a href="/dashboard" class="sidebar-link active"><i class="bi bi-grid-1x2-fill"></i> Overview</a>
+
+        <a href="/flight-log" class="sidebar-link"><i class="bi bi-activity"></i> Flight Log</a>
+
+        <div style="position: absolute; bottom: 20px; width: calc(100% - 40px);">
+            <a href="/logout" class="sidebar-link" style="color: #ff4444;"><i class="bi bi-box-arrow-left"></i> Logout</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h2 class="header-title">SYSTEM OVERVIEW <span style="color: #aaa;" class="fs-6 ms-2">Jalapatih Telemetry & Data</span></h2>
+        
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="data-card" style="min-height: auto; border-top: 3px solid #C5EAF3;">
+                    <h6 style="color: #aaa;">Total Sponsor Messages</h6>
+                    <h2 style="font-family: 'Orbitron', sans-serif;"><%= partners.length %></h2>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="data-card" style="min-height: auto; border-top: 3px solid #EA6323;">
+                    <h6 style="color: #aaa;">Pending Leads</h6>
+                    <h2 style="font-family: 'Orbitron', sans-serif;">
+                        <%= partners.filter(p => p.status === 'New Lead' || !p.status).length %>
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 style="color: #aaa;" class="m-0"><i class="bi bi-clock-history"></i> Recent Sponsorship Leads</h5>
+                <div>
+                    <a href="/export/excel" class="btn btn-sm btn-success me-2" style="font-family: 'Orbitron', sans-serif;">
+                        <i class="bi bi-file-earmark-excel"></i> EXCEL
+                    </a>
+                    <a href="/export/pdf" class="btn btn-sm btn-danger" style="font-family: 'Orbitron', sans-serif;">
+                        <i class="bi bi-file-earmark-pdf"></i> PDF
+                    </a>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-dark table-hover align-middle">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #EA6323;">
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Institution</th>
+                            <th>Contact</th>
+                            <th>Message</th>
+                            <th>Attachment</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (partners.length > 0) { %>
+                            <% partners.forEach(p => { %>
+                                <tr>
+                                    <td style="color: #aaa;" class="small"><%= p.date ? new Date(p.date).toLocaleDateString('id-ID') : '-' %></td>
+                                    <td class="fw-bold" style="color: #C5EAF3;"><%= p.name %></td>
+                                    <td><%= p.institution %></td>
+                                    <td class="small">
+                                        <div><i class="bi bi-envelope" style="color: #aaa;"></i> <%= p.email %></div>
+                                        <div><i class="bi bi-telephone" style="color: #aaa;"></i> <%= p.phone %></div>
+                                    </td>
+                                    <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= p.message %>">
+                                        <%= p.message %>
+                                    </td>
+                                    <td>
+                                        <% if (p.attachment) { %>
+                                            <a href="/uploads/<%= p.attachment %>" target="_blank" class="btn btn-sm btn-outline-success">
+                                                <i class="bi bi-paperclip"></i> View File
+                                            </a>
+                                        <% } else { %>
+                                            <span style="color: #aaa;" class="small">No File</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <% 
+                                            let badgeColor = 'bg-secondary';
+                                            if (p.status === 'Contacted') badgeColor = 'bg-warning text-dark';
+                                            if (p.status === 'Deal') badgeColor = 'bg-success';
+                                        %>
+                                        <div class="mb-1">
+                                            <span class="badge <%= badgeColor %>"><%= p.status || 'New Lead' %></span>
+                                        </div>
+                                        <select class="form-select form-select-sm bg-dark text-white border-secondary" style="font-size: 0.8rem; width: 110px;" onchange="updateStatus('<%= p._id %>', this.value)">
+                                            <option value="New Lead" <%= p.status === 'New Lead' ? 'selected' : '' %>>New Lead</option>
+                                            <option value="Contacted" <%= p.status === 'Contacted' ? 'selected' : '' %>>Contacted</option>
+                                            <option value="Deal" <%= p.status === 'Deal' ? 'selected' : '' %>>Deal</option>
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-info" onclick="lihatPesan(`<%= p.name %>`, `<%= p.message.replace(/`/g, '\\`') %>`)"><i class="bi bi-eye"></i></button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="hapusPesan('<%= p._id %>')"><i class="bi bi-trash"></i></button>                                    
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="8" class="text-center py-4" style="color: #aaa;">Belum ada pesan sponsor yang masuk.</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // function liat pesan lengkap
+        function lihatPesan(nama, pesan) {
+            alert(`Pesan dari ${nama}:\n\n${pesan}`);
+        }
+
+        // function delete message
+        async function hapusPesan(id) {
+            const konfirmasi = confirm("Peringatan: Yakin ingin menghapus data sponsor ini secara permanen?");
+            
+            if (konfirmasi) {
+                try {
+                    const response = await fetch(`/partner/${id}`, { method: 'DELETE' });
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        window.location.reload();
+                    } else {
+                        alert("Gagal menghapus pesan.");
+                    }
+                } catch (error) {
+                    alert("Terjadi kesalahan pada server.");
+                    console.error(error);
+                }
+            }
+        }
+
+        // function update status respon
+        async function updateStatus(id, statusBaru) {
+            try {
+                const response = await fetch(`/partner/status/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: statusBaru })
+                });
+                const result = await response.json();
+                
+                if (result.success) {
+                    window.location.reload();
+                } else {
+                    alert("Gagal memperbarui status.");
+                }
+            } catch (error) {
+                alert("Terjadi kesalahan server.");
+                console.error(error);
+            }
+        }
+    </script>
+
+</body>
+</html>

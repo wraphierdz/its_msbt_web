@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Log - MSBT Command</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #050505; color: white; font-family: 'Rajdhani', sans-serif; display: flex; }
+        .sidebar { width: 250px; height: 100vh; background-color: #121212; border-right: 1px solid #333; padding: 20px; position: fixed; }
+        .sidebar-link { color: #d1d1d1; text-decoration: none; display: block; padding: 12px 15px; border-radius: 6px; margin-bottom: 10px; font-size: 1.1rem; transition: 0.3s; }
+        .sidebar-link:hover, .sidebar-link.active { background-color: rgba(234, 99, 35, 0.1); color: #EA6323; border-left: 3px solid #EA6323; }
+        .sidebar-link i { margin-right: 10px; }
+        .main-content { margin-left: 250px; padding: 40px; width: 100%; }
+        .header-title { font-family: 'Orbitron', sans-serif; letter-spacing: 2px; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #333; }
+        .data-card { background: #121212; border: 1px solid #333; border-radius: 8px; padding: 20px; min-height: 300px; }
+        
+        .telemetry-table { font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="text-center mb-5 mt-3">
+            <img src="/assets/logo-white.png" alt="MSBT" style="height: 40px;">
+        </div>
+        <a href="/dashboard" class="sidebar-link"><i class="bi bi-grid-1x2-fill"></i> Overview</a>
+        <a href="/flight-log" class="sidebar-link active"><i class="bi bi-activity"></i> Flight Log</a>
+        
+        <div style="position: absolute; bottom: 20px; width: calc(100% - 40px);">
+            <a href="/logout" class="sidebar-link" style="color: #ff4444;"><i class="bi bi-box-arrow-left"></i> Logout</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h2 class="header-title">TELEMETRY LOGGING <span style="color: #aaa;" class="fs-6 ms-2">Flight Data Record</span></h2>
+
+        <div class="data-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <button class="btn btn-sm btn-outline-warning" onclick="simulateData()">
+                        <i class="bi bi-broadcast"></i> SIMULATE DATA INJECTION
+                    </button>
+                </div>
+                <div>
+                    <a href="/export/flight-log/csv" class="btn btn-sm btn-success me-2" style="font-family: 'Orbitron', sans-serif;">
+                        <i class="bi bi-file-earmark-spreadsheet"></i> EXPORT CSV
+                    </a>
+                    <a href="/export/flight-log/pdf" class="btn btn-sm btn-danger" style="font-family: 'Orbitron', sans-serif;">
+                        <i class="bi bi-file-earmark-pdf"></i> EXPORT PDF
+                    </a>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-dark table-hover table-bordered border-secondary telemetry-table text-center align-middle">
+                    <thead>
+                        <tr style="border-bottom: 2px solid #C5EAF3; color: #C5EAF3;">
+                            <th class="text-start">Timestamp</th>
+                            <th>Throt(%)</th>
+                            <th>Spd(km/h)</th>
+                            <th>RPM</th>
+                            <th>Alt(m)</th>
+                            <th>Roll(°)</th>
+                            <th>Pitch(°)</th>
+                            <th>Yaw(°)</th>
+                            <th>Batt(%)</th>
+                            <th>Charge(Amp)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (logs.length > 0) { %>
+                            <% logs.forEach(log => { %>
+                                <tr>
+                                    <td class="text-start" style="color: #aaa;"><%= log.timestamp.toISOString().replace('T', ' ').substring(0, 19) %></td>
+                                    <td><%= log.throt %></td>
+                                    <td style="color: #EA6323; font-weight: bold;"><%= log.v_km_h %></td>
+                                    <td><%= log.mot_rpm %></td>
+                                    <td style="color: #C5EAF3;"><%= log.alt %></td>
+                                    <td><%= log.roll_deg %></td>
+                                    <td><%= log.pitch_deg %></td>
+                                    <td><%= log.yaw_deg %></td>
+                                    <td style="color: <%= log.batt_pctg < 20 ? '#ff4444' : '#44ff44' %>;">
+                                        <%= log.batt_pctg %>%
+                                    </td>
+                                    <td><%= log.curr_charge %></td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="10" class="text-center py-4" style="color: #aaa; font-family: 'Rajdhani', sans-serif;">No telemetry data recorded yet. Waiting for signal...</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function simulateData() {
+            try {
+                // tembak random data ke database
+                const response = await fetch('/api/flight-log/simulate', { method: 'POST' });
+                const result = await response.json();
+                
+                if(result.success) {
+                    // reload page update tabel
+                    window.location.reload();
+                }
+            } catch (error) {
+                alert("Gagal menyuntikkan data simulasi.");
+            }
+        }
+    </script>
+</body>
+</html>

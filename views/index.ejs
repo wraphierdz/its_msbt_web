@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITS MSBT Official Website</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <style>
+        body, html {
+            height: 100%;
+            scrollbar-width: none;
+        }
+
+        .frame {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,1) 100%);
+            z-index: 1;
+        }
+
+        .content { position: relative; z-index: 2; width: 100%; }
+
+        .tagline {
+            font-family: var(--font-display); font-size: 1.2rem;
+            letter-spacing: 3px; margin-top: 100px; margin-bottom: 30px;
+        }
+
+        .title-container { position: relative; width: 100%; padding: 20px 0; }
+        .main-title {
+            font-family: var(--font-display); font-size: 3rem;
+            line-height: 1.2; margin: 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+        }
+        .subtitle {
+            margin-top: 20px; font-size: 1.1rem; font-weight: 400;
+            color: #d1d1d1; max-width: 700px; margin-left: auto; margin-right: auto;
+        }
+
+        .video-frame {
+            border-radius: 12px; overflow: hidden; background-color: #000;
+            transition: transform 0.4s ease;
+        }
+        .video-frame:hover { transform: scale(1.03); }
+
+        .bg-frame-1 { background-image: url('/assets/thumbnail.jpg'); }
+        .bg-frame-2 { background-image: url('/assets/brief.jpg'); }
+        .bg-frame-3 {
+            background: radial-gradient(circle at center, #2F2F2F 0%, #050505 100%);
+            background-image: radial-gradient(#444 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .bg-frame-4 { background-color: #030303; }
+
+        .center-content {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); z-index: 10;
+        }
+        .achievement-title {
+            font-family: var(--font-display); font-size: clamp(2rem, 5vw, 4.5rem);
+            color: white; text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            margin: 0; letter-spacing: 5px;
+        }
+
+        .achv-wrapper {
+            position: absolute; z-index: 5; opacity: 0;
+            transform: translateY(80px) scale(0.8);
+            transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .pos-1 { top: 15%; left: 8%; }
+        .pos-2 { top: 15%; right: 8%; }
+        .pos-3 { bottom: 15%; left: 12%; }
+        .pos-4 { bottom: 15%; right: 12%; }
+        .pos-5 { bottom: 5%; left: 50%; margin-left: -115px; }
+
+        .achv-card {
+            width: 230px; background: linear-gradient(135deg, var(--bright-orange) 0%, #a84111 100%);
+            border-radius: 12px; padding: 20px 15px; box-shadow: 0 15px 25px rgba(0,0,0,0.5);
+            border: 2px solid #fff; position: relative; text-align: center;
+        }
+        .corner-badge {
+            position: absolute; top: -15px; left: -15px; background-color: white;
+            color: var(--bright-orange); font-family: var(--font-display);
+            font-size: 1.2rem; padding: 5px 12px; transform: rotate(-15deg);
+            border-radius: 5px; box-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+        }
+        .achv-name { font-family: var(--font-display); font-size: 1.1rem; color: white; margin: 10px 0; }
+        .achv-img {
+            width: 100%; height: 110px; object-fit: cover; border-radius: 6px;
+            margin-bottom: 10px; border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .achv-desc { font-size: 0.85rem; margin: 0; color: #f1f1f1; line-height: 1.3; }
+
+        .achv-accent-line {
+            width: 0px; height: 3px; background-color: var(--bright-orange);
+            box-shadow: 0 0 12px rgba(234, 99, 35, 0.8); margin: 15px auto;
+            border-radius: 2px; transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s;
+        }
+        .achv-center-text {
+            color: #b0b0b0; font-size: 1.05rem; max-width: 450px; margin: 0 auto;
+            line-height: 1.5; opacity: 0; transform: translateY(20px); transition: all 0.8s ease 0.7s;
+        }
+
+        .show-achievements .achv-accent-line { width: 100px; }
+        .show-achievements .achv-center-text { opacity: 1; transform: translateY(0); }
+        .show-achievements .pos-1 { opacity: 1; transform: translateY(0) scale(1); transition-delay: 0.1s; }
+        .show-achievements .pos-2 { opacity: 1; transform: translateY(0) scale(1); transition-delay: 0.3s; }
+        .show-achievements .pos-3 { opacity: 1; transform: translateY(0) scale(1); transition-delay: 0.5s; }
+        .show-achievements .pos-4 { opacity: 1; transform: translateY(0) scale(1); transition-delay: 0.7s; }
+        .show-achievements .pos-5 { opacity: 1; transform: translateY(0) scale(1); transition-delay: 0.9s; }
+
+        .sponsor-logo {
+            height: 300px; width: auto; max-width: 200px; object-fit: contain;
+            filter: grayscale(100%) opacity(0.6); transition: all 0.4s ease; cursor: pointer;
+        }
+        .sponsor-logo:hover { filter: grayscale(0%) opacity(1); transform: scale(1.1); }
+
+        @media (max-height: 850px) and (min-width: 992px) {
+            .achievement-title { font-size: 3.5rem; }
+            .show-achievements .pos-1, .show-achievements .pos-2, .show-achievements .pos-3, .show-achievements .pos-4, .show-achievements .pos-5 { transform: translateY(0) scale(0.8); }
+            .pos-1 { top: 5%; left: 2%; } .pos-2 { top: 5%; right: 2%; }
+            .pos-3 { bottom: 5%; left: 5%; } .pos-4 { bottom: 5%; right: 5%; } .pos-5 { bottom: -2%; }
+            .wave-animation-container { margin-top: 5px; }
+        }
+        @media (max-width: 768px) { .sponsor-logo { height: 45px; max-width: 120px; } }
+        @media (max-width: 991px) {
+            .cards-container { display: flex; flex-direction: column; align-items: center; gap: 20px; height: 100vh; overflow-y: auto; padding: 120px 0 50px 0; }
+            .achv-wrapper { position: relative; top: auto !important; left: auto !important; right: auto !important; bottom: auto !important; margin: 0; }
+            .center-content { top: 80px; transform: translateX(-50%); }
+        }
+    </style>
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container-fluid px-5">
+            <a class="navbar-brand text-white" href="#" style="font-family: var(--font-display); font-size: 1.5rem;">
+                <img src="/assets/logo-white.png" alt="MSBT Logo" onerror="this.style.display='none'">
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="/">ABOUT</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/our-boat">OUR BOAT</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/competition">COMPETITION</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/partner">PARTNER WITH US</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="scroll-container">
+        
+        <section class="frame bg-frame-1">
+            <div class="overlay"></div>
+            <div class="content">
+                <div class="tagline">MAJU MARITIMKU JAYA INDONESIAKU</div>
+                
+                <div class="title-container">
+                    <h1 class="main-title">MARINE SOLAR BOAT TEAM<br>ITS OFFICIAL WEBSITE</h1>
+
+                    <div class="wave-animation-container">
+                        <svg class="orange-wave" viewBox="0 0 400 60" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 0 30 Q 200 50 400 10 Q 200 40 0 30 Z" fill="var(--bright-orange)"></path>
+                            <path d="M 50 45 Q 200 60 350 25 Q 200 50 50 45 Z" fill="var(--bright-orange)" opacity="0.6"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <p class="subtitle">Institut Teknologi Sepuluh Nopember Marine Solar Boat Team<br>The first solar powered boat team that represent ASEAN in Global Competition</p>
+            </div>
+        </section>
+
+        <section class="frame bg-frame-2">
+            <div class="overlay"></div>
+            <div class="content">
+                
+                <div class="container text-center">
+                    <div class="tagline mb-4 text-white">DISCOVER OUR JOURNEY</div>
+                    
+                    <div class="row justify-content-center">
+                        <div class="col-11 col-md-8 col-lg-7">
+                            <div class="video-frame">
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="https://www.youtube.com/embed/-bmwsHbArSQ" title="MSBT Video Profile" allowfullscreen></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="subtitle mt-4">The ITS Marine Solar Boat Team (ITS MSBT) from the Sepuluh Nopember Institute of Technology is focused on building solar-powered vessels. The team is currently completing a vessel called the Jalapatih VI boat, featuring active hydrofoil innovation.</p>
+                    
+                </div>
+
+            </div>
+        </section>
+
+        <section class="frame bg-frame-3" id="achievementFrame">
+            <div class="overlay"></div>
+            
+            <div class="content center-content text-center">
+                <h2 class="achievement-title">ACHIEVEMENTS</h2>
+                <div class="achv-accent-line"></div>
+                <p class="achv-center-text">
+                    Pioneering the future of sustainable maritime technology and hydrofoil innovation on the global stage.
+                </p>
+            </div>
+
+            <div class="cards-container">
+                
+                <div class="achv-wrapper pos-1">
+                    <div class="achv-card">
+                        <div class="corner-badge">1st</div>
+                        <h5 class="achv-name">JALAPATIH I</h5>
+                        <img src="/assets/jp1.png" alt="Jalapatih I" class="achv-img">
+                        <p class="achv-desc">First ASEAN solar boat presented in Global Competition (Dong Solar Energy Challenge 2014).</p>
+                    </div>
+                </div>
+
+                <div class="achv-wrapper pos-2">
+                    <div class="achv-card">
+                        <div class="corner-badge">2nd</div>
+                        <h5 class="achv-name">JALAPATIH II</h5>
+                        <img src="/assets/jp2.png" alt="Jalapatih I" class="achv-img">
+                        <p class="achv-desc">2nd Runner Up in Asia Dutch Solar Challenge.</p>
+                    </div>
+                </div>
+
+                <div class="achv-wrapper pos-3">
+                    <div class="achv-card">
+                        <div class="corner-badge">3rd</div>
+                        <h5 class="achv-name">JALAPATIH III</h5>
+                        <img src="/assets/jp3-back.png" alt="Jalapatih I" class="achv-img">
+                        <p class="achv-desc">3rd Position in Top Speed Category Solar Sport One.</p>
+                    </div>
+                </div>
+
+                <div class="achv-wrapper pos-4">
+                    <div class="achv-card">
+                        <div class="corner-badge">1st</div>
+                        <h5 class="achv-name">JALAPATIH IV</h5>
+                        <img src="/assets/jp4.png" alt="Jalapatih I" class="achv-img">
+                        <p class="achv-desc">First solar boat to use hydrofoil technology in Indonesia.</p>
+                    </div>
+                </div>
+
+                <div class="achv-wrapper pos-5">
+                    <div class="achv-card">
+                        <div class="corner-badge">Mild</div>
+                        <h5 class="achv-name">JALAPATIH V</h5>
+                        <img src="/assets/jp5.png" alt="Jalapatih I" class="achv-img">
+                        <p class="achv-desc">Used a planing hull to provide an angle of attack.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="frame bg-frame-4">
+            <div class="content">
+                <div class="container text-center">
+                    
+                    <div class="tagline text-white" style="margin-bottom: 60px;">SUPPORTED BY</div>
+                    
+                    <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 gap-md-5">
+                        
+                        <img src="/assets/FIBERBOAT-LOGO.png" alt="Sponsor 1" class="sponsor-logo">
+                        <img src="/assets/BBS-LOGO.png" alt="Sponsor 2" class="sponsor-logo">
+                        <img src="/assets/DRAGONSHIP-LOGO.png" alt="Sponsor 3" class="sponsor-logo">
+                        <img src="/assets/KUPPRUM-LOGO.png" alt="Sponsor 4" class="sponsor-logo">
+                        <img src="/assets/JEMLA-LOGO.png" alt="Sponsor 5" class="sponsor-logo">
+                        
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="frame bg-frame-footer">
+        <div class="content w-100">
+            <div class="container text-start">
+                <div class="row pt-5 justify-content-between">
+                    
+                    <div class="col-lg-4 mb-5 mb-lg-0">
+                        <h3 class="footer-heading">HEADQUARTERS</h3>
+                        <p class="footer-text">
+                            Institut Teknologi Sepuluh Nopember<br>
+                            Keputih, Sukolilo, Surabaya<br>
+                            Jawa Timur 60111, Indonesia
+                        </p>
+                    </div>
+
+                    <div class="col-lg-4 mb-5 mb-lg-0 d-flex justify-content-lg-center">
+                        <div>
+                            <h3 class="footer-heading">GET IN TOUCH</h3>
+                            <div class="contact-item">
+                                <i class="bi bi-envelope-fill"></i>
+                                <a href="mailto:msbt@its.ac.id">its.marinesolarboatteam@gmail.com</a>
+                            </div>
+                            <div class="contact-item">
+                                <i class="bi bi-whatsapp"></i>
+                                <a href="https://wa.me/6282247637173" target="_blank">+62 822-4763-7173 (Public Relation)</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 d-flex justify-content-lg-end">
+                        <div>
+                            <h3 class="footer-heading">SOCIAL MEDIA</h3>
+                            <div class="social-links-vertical">
+                                <a href="https://www.instagram.com/its_msbt/" target="_blank">
+                                    <i class="bi bi-instagram"></i> @its_msbt
+                                </a>
+                                <a href="https://www.tiktok.com/@its_msbt" target="_blank">
+                                    <i class="bi bi-tiktok"></i> @its_msbt
+                                </a>
+                                <a href="https://www.youtube.com/@itsmarinesolarboatteam8737" target="_blank">
+                                    <i class="bi bi-youtube"></i> ITS Marine Solar Boat Team
+                                </a>
+                                <a href="https://www.linkedin.com/company/itsmsbt/" target="_blank">
+                                    <i class="bi bi-linkedin"></i> ITS Marine Solar Boat Team
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="footer-divider">
+                <div class="text-center footer-copyright">
+                    &copy; 2026 ITS Marine Solar Boat Team. All Rights Reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // animasi card achievent
+        document.addEventListener("DOMContentLoaded", function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('show-achievements');
+                    } else {
+                        entry.target.classList.remove('show-achievements');
+                    }
+                });
+            }, { threshold: 0.5 }); //klo 50% frame masuk layar
+
+            const frame3 = document.getElementById('achievementFrame');
+            observer.observe(frame3);
+        });
+    </script>
+</body>
+</html>

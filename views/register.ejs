@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Register - MSBT</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #050505; color: white; font-family: 'Rajdhani', sans-serif; height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: #121212; padding: 40px; border-radius: 12px; border-top: 4px solid #C5EAF3; box-shadow: 0 15px 40px rgba(0,0,0,0.8); width: 100%; max-width: 400px; }
+        .form-control { background-color: #000; border: 1px solid #333; color: white; }
+        .form-control:focus { background-color: #0a0a0a; border-color: #C5EAF3; color: white; box-shadow: none; }
+        .btn-login { background-color: #C5EAF3; color: black; font-family: 'Orbitron', sans-serif; width: 100%; padding: 10px; border-radius: 6px; border: none; margin-top: 20px; transition: 0.3s; }
+        .btn-login:hover { background-color: #a0d8e8; }
+        
+        .bottom-link { color: #C5EAF3; text-decoration: none; transition: 0.3s; font-weight: 600; }
+        .bottom-link:hover { color: white; text-shadow: 0 0 8px #C5EAF3; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="text-center mb-4">
+            <img src="/assets/logo-white.png" alt="MSBT Logo" style="height: 45px; margin-bottom: 15px;">
+            
+            <h4 style="font-family: 'Orbitron', sans-serif; letter-spacing: 2px; margin-bottom: 20px;">NEW COMMANDER</h4>
+            
+            <p class="small" style="color: #d1d1d1;">Register Admin Account</p>
+        </div>
+        <form action="/register" method="POST">
+            <div class="mb-3">
+                <label class="form-label" style="color: #C5EAF3;">New Admin ID</label>
+                <input type="text" class="form-control" name="username" required autocomplete="off">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="color: #C5EAF3;">Password</label>
+                <input type="password" class="form-control" name="password" required>
+            </div>
+            <button type="submit" class="btn-login">CREATE ACCOUNT</button>
+            <div class="text-center mt-4">
+                <a href="/login" class="small bottom-link">Already have access? Login here.</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

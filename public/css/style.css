@@ -1,0 +1,125 @@
+@font-face {
+    font-family: 'Ethnocentric';
+    src: url('../assets/Ethnocentric-Regular.otf') format('truetype'); /* Sesuaikan path jika ditaruh di folder css */
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --font-display: 'Ethnocentric', 'Orbitron', sans-serif;
+    --font-body: 'Rajdhani', sans-serif;
+    --neon-blue: #00d2ff;
+    --pale-blue: #C5EAF3;
+    --bright-orange: #EA6323;
+    --dark-grey: #737373;
+    --light-grey: #D9D9D9;
+    --charcoal: #2F2F2F;
+    --bg-dark: #050505;
+    --card-dark: #121212;
+}
+
+body, html {
+    margin: 0; 
+    padding: 0;
+    background-color: var(--bg-dark);
+    font-family: var(--font-body);
+    color: white;
+    overflow-x: hidden;
+}
+
+/* navbar -glassmorphism */
+.navbar {
+    background: linear-gradient(to bottom, rgba(5, 5, 5, 0.6) 20%, rgba(5, 5, 5, 0) 100%) !important; 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: none; 
+    -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
+    padding: 15px 0 30px 0; 
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand img { height: 40px; width: auto; max-height: 100%; }
+
+.navbar-nav .nav-link {
+    font-family: var(--font-display);
+    color: white !important;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    margin-left: 25px;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .active {
+    color: var(--bright-orange) !important;
+}
+
+.navbar-nav .nav-link:hover{
+    color: var(--pale-blue) !important;
+}
+
+/* footer */
+.bg-frame-footer {
+    background-color: #0a0a0a;
+    border-top: 3px solid var(--bright-orange);
+    padding-bottom: 50px;
+}
+
+.footer-heading {
+    font-family: var(--font-display);
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+}
+
+.footer-text {
+    color: #a3a3a3;
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.contact-item { margin-bottom: 15px; display: flex; align-items: center; }
+.contact-item i { color: var(--bright-orange); font-size: 1.3rem; margin-right: 15px; }
+.contact-item a { color: #a3a3a3; text-decoration: none; transition: color 0.3s; }
+.contact-item a:hover { color: white; }
+
+/* sosmed */
+.social-links-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.social-links-vertical a {
+    color: #a3a3a3;
+    text-decoration: none;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.social-links-vertical a i {
+    color: white; 
+    font-size: 1.5rem;
+    margin-right: 15px;
+    width: 30px; 
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.social-links-vertical a:hover {
+    color: white;
+    transform: translateX(8px);
+}
+
+.social-links-vertical a:hover i {
+    color: var(--bright-orange);
+    text-shadow: 0 0 12px rgba(234, 99, 35, 0.6);
+}
+
+.footer-divider { border-color: #333; margin: 50px 0 20px 0; }
+.footer-copyright { color: #666; font-size: 0.9rem; font-family: var(--font-body); }
