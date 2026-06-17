@@ -24,8 +24,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // koneksi db
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/msbt_db')    .then(() => console.log('database msbt connected'))
-    .catch(err => console.log('db connection error', err));
+const dbUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/msbt_db';
+mongoose.connect(dbUri)
+    .then(() => console.log('database connected'))
+    .catch(err => console.log('db error', err));
 
 // konfig express
 app.set('view engine', 'ejs');
