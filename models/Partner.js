@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const partnerSchema = new mongoose.Schema({
+    date: { type: Date, default: Date.now },
     name: { type: String, required: true },
     institution: { type: String, required: true },
     email: { type: String, required: true },
