@@ -125,22 +125,69 @@ app.post('/api/flight-log/simulate', cekLogin, async (req, res) => {
 
 // export reports
 app.get('/export/pdf', cekLogin, async (req, res) => {
-    const partners = await Partner.find().sort({ date: -1 });
-    const doc = new PDFDocument({ size: 'A4', layout: 'landscape' });
-    res.setHeader('Content-Type', 'application/pdf');
-    doc.pipe(res);
-    doc.text('Partner Leads');
-    logs.forEach(l => doc.text(JSON.stringify(l)));
-    doc.end();
+    try {
+        const partners = await Partner.find().sort({ date: -1 });
+        const doc = new PDFDocument({ size: 'A4', margin: 50 });
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename="partner_leads.pdf"');
+        
+        doc.pipe(res);
+
+        // Judul
+        doc.fontSize(20).text('Daftar Partner Leads', { align: 'center' });
+        doc.moveDown();
+
+        // Loop data
+        partners.forEach((p, index) => {
+            doc.fontSize(12).text(`${index + 1}. Nama: ${p.name}`);
+            doc.text(`   Institusi: ${p.institution}`);
+            doc.text(`   Email: ${p.email}`);
+            doc.text(`   Telepon: ${p.phone}`);
+            doc.text(`   Pesan: ${p.message}`);
+            doc.text(`   Status: ${p.status}`);
+            doc.moveDown();
+            doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke(); // Garis pemisah
+            doc.moveDown();
+        });
+
+        doc.end();
+    } catch (error) {
+        res.status(500).send("Gagal membuat PDF");
+    }
 });
 
 app.get('/export/excel', cekLogin, async (req, res) => {
     const partners = await Partner.find().sort({ date: -1 });
     const wb = new ExcelJS.Workbook();
     const ws = wb.addWorksheet('Sponsor Leads');
-    ws.columns = [{ header: 'Nama', key: 'name', width: 20 }, { header: 'Email', key: 'email', width: 20 }];
-    partners.forEach(p => ws.addRow(p));
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+    
+    ws.columns = [
+        { header: 'Nama', key: 'name', width: 20 },
+        { header: 'Institusi', key: 'institution', width: 20 },
+        { header: 'Email', key: 'email', width: 25 },
+        { header: 'Telepon', key: 'phone', width: 15 },
+        { header: 'Pesan', key: 'message', width: 30 },
+        { header: 'Attachment', key: 'attachment', width: 20 },
+        { header: 'Status', key: 'status', width: 15 },
+        { header: 'ID', key: '_id', width: 25 }
+    ];
+
+    partners.forEach(p => {
+        ws.addRow({
+            name: p.name,
+            institution: p.institution,
+            email: p.email,
+            phone: p.phone,
+            message: p.message,
+            attachment: p.attachment,
+            status: p.status,
+            _id: p._id.toString()
+        });
+    });
+
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=partners.xlsx');
     await wb.xlsx.write(res);
     res.end();
 });
