@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // koneksi db
-const dbUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/msbt_db';
+const dbUri = process.env.MONGODB_URI || 'mongodb+srv://wijdanrazefi99_db_user:1ECNQPcUXecL67VW@cluster0.inqqsmg.mongodb.net/?appName=Cluster0';
 mongoose.connect(dbUri)
     .then(() => console.log('database connected'))
     .catch(err => console.log('db error', err));
