@@ -55,7 +55,7 @@ app.post('/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         await new Admin({ username: req.body.username, password: hashedPassword }).save();
         res.redirect('/login');
-    } catch (e) { res.send("gagal daftar"); }
+    } catch (e) { res.send("Register failed"); }
 });
 
 app.get('/login', (req, res) => req.session.adminId ? res.redirect('/dashboard') : res.render('login'));
@@ -123,7 +123,7 @@ app.post('/api/flight-log/simulate', cekLogin, async (req, res) => {
     res.json({ success: true });
 });
 
-// export reports
+// export pdf partner
 app.get('/export/pdf', cekLogin, async (req, res) => {
     try {
         const partners = await Partner.find().sort({ date: -1 });
@@ -131,58 +131,56 @@ app.get('/export/pdf', cekLogin, async (req, res) => {
 
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename="partner_leads.pdf"');
-        
         doc.pipe(res);
 
-        // Judul
         doc.fontSize(20).text('Daftar Partner Leads', { align: 'center' });
         doc.moveDown();
 
-        // Loop data
         partners.forEach((p, index) => {
-            doc.fontSize(12).text(`${index + 1}. Nama: ${p.name}`);
+            // Menambahkan Date
+            const tgl = p.date ? new Date(p.date).toLocaleDateString() : '-';
+            doc.fontSize(12).text(`${index + 1}. [${tgl}] Nama: ${p.name}`);
+            
             doc.text(`   Institusi: ${p.institution}`);
             doc.text(`   Email: ${p.email}`);
             doc.text(`   Telepon: ${p.phone}`);
             doc.text(`   Pesan: ${p.message}`);
             doc.text(`   Status: ${p.status}`);
             doc.moveDown();
-            doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke(); // Garis pemisah
+            doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke();
             doc.moveDown();
         });
 
         doc.end();
     } catch (error) {
-        res.status(500).send("Gagal membuat PDF");
+        res.status(500).send("Failed create PDF");
     }
 });
 
+// export xlsx partner
 app.get('/export/excel', cekLogin, async (req, res) => {
     const partners = await Partner.find().sort({ date: -1 });
     const wb = new ExcelJS.Workbook();
     const ws = wb.addWorksheet('Sponsor Leads');
     
     ws.columns = [
+        { header: 'Date', key: 'date', width: 15 },
         { header: 'Nama', key: 'name', width: 20 },
         { header: 'Institusi', key: 'institution', width: 20 },
         { header: 'Email', key: 'email', width: 25 },
         { header: 'Telepon', key: 'phone', width: 15 },
         { header: 'Pesan', key: 'message', width: 30 },
-        { header: 'Attachment', key: 'attachment', width: 20 },
-        { header: 'Status', key: 'status', width: 15 },
-        { header: 'ID', key: '_id', width: 25 }
+        { header: 'Status', key: 'status', width: 15 }
     ];
 
     partners.forEach(p => {
         ws.addRow({
-            name: p.name,
+            date: p.date ? p.date.toLocaleDateString() : '-',
             institution: p.institution,
             email: p.email,
             phone: p.phone,
             message: p.message,
-            attachment: p.attachment,
-            status: p.status,
-            _id: p._id.toString()
+            status: p.status
         });
     });
 
@@ -192,16 +190,60 @@ app.get('/export/excel', cekLogin, async (req, res) => {
     res.end();
 });
 
+// export pdf flight-log
 app.get('/export/flight-log/pdf', cekLogin, async (req, res) => {
-    const logs = await FlightLog.find().sort({ timestamp: -1 }).limit(100);
-    const doc = new PDFDocument({ size: 'A4', layout: 'landscape' });
-    res.setHeader('Content-Type', 'application/pdf');
-    doc.pipe(res);
-    doc.text('telemetry flight log');
-    logs.forEach(l => doc.text(JSON.stringify(l)));
-    doc.end();
+    try {
+        const logs = await FlightLog.find().sort({ timestamp: -1 }).limit(50);
+        const doc = new PDFDocument({ size: 'A4', layout: 'landscape', margin: 30 });
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename="flight_log_report.pdf"');
+        doc.pipe(res);
+
+        doc.fontSize(16).text('JALAPATIH TELEMETRY FLIGHT LOG', { align: 'center' });
+        doc.moveDown();
+
+        // header tabel
+        const startX = 30;
+        let startY = 100;
+        const rowHeight = 20;
+        
+        doc.fontSize(10).font('Helvetica-Bold');
+        const headers = ['TIMESTAMP', 'THROT', 'SPD', 'RPM', 'ALT', 'ROLL', 'PTCH', 'YAW', 'BATT', 'CHRG'];
+        const colWidths = [150, 40, 40, 50, 40, 40, 40, 40, 40, 40];
+
+        headers.forEach((h, i) => {
+            doc.text(h, startX + colWidths.slice(0, i).reduce((a, b) => a + b, 0), startY);
+        });
+
+        doc.moveTo(startX, startY + 15).lineTo(780, startY + 15).stroke();
+
+        // isi data
+        doc.font('Helvetica');
+        startY += rowHeight;
+        
+        logs.forEach((l, index) => {
+            const y = startY + (index * rowHeight);
+            if (y > 550) return;
+
+            const rowData = [
+                new Date(l.timestamp).toLocaleString(),
+                l.throt, l.v_km_h, l.mot_rpm, l.alt, 
+                l.roll_deg, l.pitch_deg, l.yaw_deg, l.batt_pctg, l.curr_charge
+            ];
+
+            rowData.forEach((data, i) => {
+                doc.text(String(data), startX + colWidths.slice(0, i).reduce((a, b) => a + b, 0), y);
+            });
+        });
+
+        doc.end();
+    } catch (error) {
+        res.status(500).send("Failed create PDF");
+    }
 });
 
+// export csv flight-log
 app.get('/export/flight-log/csv', cekLogin, async (req, res) => {
     const logs = await FlightLog.find().sort({ timestamp: -1 });
     const { Parser } = require('json2csv');
