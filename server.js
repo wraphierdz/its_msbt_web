@@ -124,6 +124,16 @@ app.post('/api/flight-log/simulate', cekLogin, async (req, res) => {
 });
 
 // export reports
+app.get('/export/pdf', cekLogin, async (req, res) => {
+    const partners = await Partner.find().sort({ date: -1 });
+    const doc = new PDFDocument({ size: 'A4', layout: 'landscape' });
+    res.setHeader('Content-Type', 'application/pdf');
+    doc.pipe(res);
+    doc.text('Partner Leads');
+    logs.forEach(l => doc.text(JSON.stringify(l)));
+    doc.end();
+});
+
 app.get('/export/excel', cekLogin, async (req, res) => {
     const partners = await Partner.find().sort({ date: -1 });
     const wb = new ExcelJS.Workbook();
