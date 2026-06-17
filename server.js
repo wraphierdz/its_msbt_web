@@ -145,5 +145,16 @@ app.get('/export/flight-log/pdf', cekLogin, async (req, res) => {
     doc.end();
 });
 
+app.get('/export/flight-log/csv', cekLogin, async (req, res) => {
+    const logs = await FlightLog.find().sort({ timestamp: -1 });
+    const { Parser } = require('json2csv');
+    const parser = new Parser();
+    const csv = parser.parse(JSON.parse(JSON.stringify(logs)));
+    
+    res.header('Content-Type', 'text/csv');
+    res.attachment('flight-log.csv');
+    res.send(csv);
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('server running on port ' + PORT));
